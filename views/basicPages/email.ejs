@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMAILS</title>
+</head>
+<body>
+    <center>
+        <table width="100%">
+            <tr>
+                <td></td>
+                <td>
+                    <table>
+                        <tr>
+                            <td style="line-height: 1.5;">
+                                <h1>Dear <%= guest_f_name %> <%= guest_l_name %>,</h1>
+                                <p>
+                                    We have received your request for the TAP 3 lunch program.
+                                    Your order is successfully completed.
+                                </p>
+                                <p>
+                                    Here is a summary of what you submitted:
+                                </p>
+                                <p>
+                                    <b>Student Name:</b> <%= student_f_name %> <%= student_l_name %> <br>
+                                    <b>Order:</b> <%= meal_ordered %> <br>
+                                    <b>Location:</b> <%= location %> <br>
+                                </p>
+                                <br><br>
+                            </td>
+                        </tr>  
+                    </table>
+                </td>
+                <td class="padding"></td>
+            </tr>
+        </table>
+    </center> 
+</body>
+</html>

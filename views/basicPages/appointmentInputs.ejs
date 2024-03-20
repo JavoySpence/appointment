@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments Inputs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="scss/_utilities.scss.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container2" id="appointmentInputHeader" >
+        <h1 style="margin-left: 25rem;">MAKE AN APPOINTMENT</h1>
+    </div>
+
+    <form action="/newAppointment" method="post" style="margin-top: 5rem;">
+<!-- 
+        <div class="container"id="appointmentInputHeader" >
+             <h1 style="margin-left: 21rem;">MAKE AN APPOINTMENT</h1>
+          </div> -->
+       
+
+       <label for="firstname" >FIRSTNAME</label><br>
+       <input type="text" name="firstname" id="firstname" class="form-control" required><br><br>
+
+       <label for="lastname">LASTNAME</label><br>
+       <input type="text" name="lastname" id="lastname" class="form-control" required><br><br>
+
+       <!-- <label for="reason_for_visit">REASON FOR VISIT</label><br> -->
+       <select style="width: 100%;" name="time" style="width: 20rem;">
+        <option value="">SERVICES</option>
+        <% for (let i = 0; i < servicesData.length; i++) { %>
+            <option value="<%=servicesData[i].reason_for_visit %>"><%=servicesData[i].reason_for_visit %></option>
+        <% } %>
+    </select><br><br>
+
+       <label for="phone">PHONE</label><br>
+       <input type="text" name="phone" id="phone" class="form-control" required><br><br>
+
+       <label for="email">EMAIL</label><br>
+       <input type="text" name="email" id="email" class="form-control" required><br><br>
+
+       <label for="date">DATE</label><br>
+       <input type="date" name="date" id="date" class="form-control" required><br><br>
+       
+       
+
+       <label for="time">TIME</label><br>
+       <select style="width: 100%;" name="time" style="width: 20rem;">
+        <option value="">TIME</option>
+        <% for (let i = 0; i < data.length; i++) { %>
+            <option value="<%= data[i].time %>"><%= data[i].time %></option>
+        <% } %>
+    </select><br><br>
+     
+
+       <button type="submit" class="btn btn-danger" style="width: 100%;">SUBMIT</button>
+
+
+    </form>
+</body>
+</html>
