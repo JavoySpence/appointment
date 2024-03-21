@@ -10,6 +10,7 @@ const PORT = 3014;
 app.set('view engine', 'ejs');
 
 import pageRoutes from './routes/pagesRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 
 app.use(express.json({limit: '1kb'}))
@@ -20,8 +21,9 @@ app.use('/public', express.static('public'))
 app.use(morgan('dev'));
 
 app.use('/', pageRoutes);
+app.use('/', authRoutes);
 
-;
+
 
 
 app.use('/', express.static('public'));

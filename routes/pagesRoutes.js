@@ -1,52 +1,108 @@
 // pagesRoutes.js
 import express from 'express';
 import morgan from 'morgan';
-import { getAllAppointments, deleteAppointment, newAppointment, getAlltime, getAllServices, newService, deleteService } from '../data/database.js';
+import { getAllAppointments, deleteAppointment, newAppointment, getAlltime, getAllServices, newService, deleteService, } from '../data/database.js';
 import { sendEmail } from '../utils/emailRoutes.js';
+import bcrypt from 'bcrypt';
+import session from 'express-session';
+
 
 const pageRoutes = express.Router();
 
-pageRoutes.get('/about', (req, res) => {
+
+
+pageRoutes.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 60000 * 1,
+    }
+  }));
+
+  
+  const isAuthenticated = (req, res, next) => {
+    if (req.session && req.session.user) {
+        return next();
+    } else {
+        req.session.returnTo = req.originalUrl;
+        try {
+            return res.redirect('/loginforms');
+        } catch (error) {
+            console.error('Error redirecting to login page:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
+  };
+
+  const isAuthenticated2 = (req, res, next) => {
+    if (req.session && req.session.user) {
+        return next();
+    } else {
+        req.session.returnTo = req.originalUrl;
+        try {
+            return res.redirect('/loginforms2');
+        } catch (error) {
+            console.error('Error redirecting to login page:', error);
+            return res.status(500).send('Internal Server Error');
+        }
+    }
+  };
+
+pageRoutes.get('/about', async (req, res) => {
     res.render('basicPages/about');
 });
 
-pageRoutes.get('/aboutAdmin', (req, res) => {
+pageRoutes.get('/aboutAdmin', async (req, res) => {
     res.render('basicPages/aboutAdmin');
 });
 
 
-pageRoutes.get('/home', (req, res) => {
+pageRoutes.get('/home', async (req, res) => {
     res.render('basicPages/home');
 });
 
-pageRoutes.get('/servicesInputs', (req, res) => {
+pageRoutes.get('/servicesInputs', async (req, res) => {
     res.render('basicPages/servicesInputs');
 });
 
-pageRoutes.get('/homeAdmin', (req, res) => {
+pageRoutes.get('/homeAdmin', async (req, res) => {
     res.render('basicPages/homeAdmin');
 });
 
-pageRoutes.get('/services', (req, res) => {
-    res.render('basicPages/services');
+
+pageRoutes.get('/signupForms', async (req, res) => {
+    res.render('basicPages/signup');
 });
 
-pageRoutes.get('/servicesAdmin', (req, res) => {
+pageRoutes.get('/loginForms', async (req, res) => {
+    res.render('basicPages/login');
+});
+
+pageRoutes.get('/loginForms2', async (req, res) => {
+    res.render('basicPages/login2');
+});
+
+pageRoutes.get('/servicesAdmin', async (req, res) => {
     res.render('basicPages/servicesAdmin');
 });
 
-pageRoutes.get('/contact', (req, res) => {
+pageRoutes.get('/services', async (req, res) => {
+    res.render('basicPages/services');
+});
+
+pageRoutes.get('/contact', async (req, res) => {
     res.render('basicPages/contact');
 });
 
-pageRoutes.get('/contactAdmin', (req, res) => {
+pageRoutes.get('/contactAdmin', async (req, res) => {
     res.render('basicPages/contactAdmin');
 });
 
 
 
 
-pageRoutes.get('/allAppointments', async (req, res) => {
+pageRoutes.get('/allAppointments', isAuthenticated, async (req, res) => {
     const appointmentList = await getAllAppointments()
     res.render('basicPages/allAppointments', { data: appointmentList });
 });
@@ -72,7 +128,7 @@ pageRoutes.get('/appointmentInputs', async (req, res) => {
 
 
 
-pageRoutes.post('/newAppointment', async (req, res) => {
+pageRoutes.post('/newAppointment', isAuthenticated2, async (req, res) => {
     const newEntry = new Object();
     newEntry.firstname = req.body.firstname;
     newEntry.lastname = req.body.lastname;
@@ -91,6 +147,10 @@ pageRoutes.post('/newAppointment', async (req, res) => {
 });
 
 
+
+
+
+
 pageRoutes.post('/newService', async (req, res) => {
     const newEntry = new Object();
     newEntry.reason_for_visit = req.body.reason_for_visit;
@@ -102,7 +162,7 @@ pageRoutes.post('/newService', async (req, res) => {
 });
 
 
-pageRoutes.get('/servicesList', async (req, res) => {
+pageRoutes.get('/servicesList', isAuthenticated2, async (req, res) => {
     const serviceList = await getAllServices();
     console.log(serviceList);
     res.render('basicPages/servicesList', { data: serviceList });
@@ -113,9 +173,6 @@ pageRoutes.get('/deleteService/:id', async (req, res) => {
     const result = await deleteService(id);
    res.redirect('/servicesList');
 });
-
-
-
 
 
 

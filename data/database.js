@@ -53,5 +53,19 @@ export const getAllServices = async () => {
 export const newService = async (oService) => {
     const result = await pool.query('INSERT INTO services_offered (reason_for_visit)   VALUES(?)', [oService.reason_for_visit])
     return result[0];
+};
+
+// =================================================================================================================================
+// ADMINS
+// =================================================================================================================================
+
+export const getAllUsers = async () => {
+    const result = await pool.query('SELECT * FROM users');
+    return result[0];
 }
 
+
+export const createUser = async (oUser) => {
+    const result = await pool.query('INSERT INTO users (username, password) VALUES(?, ?)', [oUser.username, oUser.password])
+    return result[0];
+};
